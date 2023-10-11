@@ -42,6 +42,7 @@ class ConjugationPresentController extends AbstractController
     // fetching objects from database (entityManager and getRepository)
     public function getVerbs(EntityManagerInterface $entityManager): Response {
         /** @var ConjugationPresentRepository $repository */
+        // using getRepository to get objects from database (list of verbs)
         $repository = $entityManager->getRepository(ConjugationPresent::class);
         // making a query then converting to array
         $query = $repository->createQueryBuilder('verb')->getQuery();
