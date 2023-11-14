@@ -18,26 +18,33 @@ class UserController extends AbstractController
     {
         // get the content of the request. getContent() will give a string;
         $reqArr = $request->toArray();
+        // var_dump($reqArr);
 
         /** @var UserRepository $userRepository */
         $userRepository = $entity_manager->getRepository(User::class);
-        $user = $userRepository->findOneBy(['nickname' => $reqArr['nickname']]);
+        $userNickname = $userRepository->findOneBy(['nickname' => $reqArr['nickname']]);
 
-        if ($user) {
-            $response = ['message' => 'User already exists.'];
-            $status = 403;
+        if ($reqArr['nickname'] == '' || $reqArr['name'] == '' || $reqArr['password'] == '') {
+            $response = ['message' => 'Please fill in all the fields.'];
+            $status = 411;
         } else {
-            $user = new User();
-            $user->setNickname($reqArr['nickname']);
-            $user->setName($reqArr['name']);
-            $user->setPassword($reqArr['password']);
+            if ($userNickname) {
+                // var_dump($userName);
+                $response = ['message' => 'User already exists.'];
+                $status = 403;
+            } else {
+                $user = new User();
+                $user->setNickname($reqArr['nickname']);
+                $user->setName($reqArr['name']);
+                $user->setPassword($reqArr['password']);
 
-            // Push and save to database
-            $entity_manager->persist($user);
-            $entity_manager->flush();
+                // Push and save to database
+                $entity_manager->persist($user);
+                $entity_manager->flush();
 
-            $response = ['message' => 'User created.'];
-            $status = 201;
+                $response = ['message' => 'User created.'];
+                $status = 201;
+            }
         }
 
         return $this->json($response, $status);
