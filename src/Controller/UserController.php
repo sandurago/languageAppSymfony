@@ -42,7 +42,7 @@ class UserController extends AbstractController
                 $entity_manager->persist($user);
                 $entity_manager->flush();
 
-                $response = ['message' => 'User created.'];
+                $response = ['message' => 'User created.', 'id' => $user->getId()];
                 $status = 201;
             }
         }
@@ -63,7 +63,7 @@ class UserController extends AbstractController
             $response = ['message' => 'Cannot login. User not found.'];
             $status = 404;
         } else {
-            $response = ['message' => 'OK'];
+            $response = ['message' => 'OK', 'id' => $user->getId()];
             $status = 200;
         }
         return new JsonResponse($response, $status);

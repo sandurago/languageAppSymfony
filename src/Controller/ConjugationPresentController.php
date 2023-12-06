@@ -1,4 +1,5 @@
 <?php
+// @CrossOrigin(origins = "http://localhost:4200")
 
 namespace App\Controller;
 
@@ -6,34 +7,13 @@ use App\Entity\ConjugationPresent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ConjugationPresentRepository;
 
 class ConjugationPresentController extends AbstractController
 {
-    #[Route('/conjugation/present', name: 'conjugation_present')]
-    public function createConjugation(EntityManagerInterface $entityManager): JsonResponse
-    {
-        $verb = new ConjugationPresent();
-        $verb->setName('avoir');
-        $verb->setTranslation('to have');
-        $verb->setExample('elle a un chien');
-        $verb->setJe('ai');
-        $verb->setTu('as');
-        $verb->setIlelle('a');
-        $verb->setNous('avons');
-        $verb->setVous('avez');
-        $verb->setIlselles('ont');
-
-        $entityManager->persist($verb);
-        $entityManager->flush();
-
-        return $this->json([
-            'message' => 'verb saved!'
-        ]);
-    }
-
     #[Route('/verbs', name: 'verbs')]
     // here will be the function that reads verbs from database
     // then sends it in a response

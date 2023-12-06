@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConjugationPresentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConjugationPresentRepository::class)]
@@ -39,6 +41,17 @@ class ConjugationPresent
 
     #[ORM\Column(length: 255)]
     private ?string $ilselles = null;
+
+    #[ORM\ManyToOne(inversedBy: 'conjugationPresents')]
+    private ?User $User = null;
+
+    #[ORM\OneToMany(mappedBy: 'verb_id', targetEntity: UserAnswersPresent::class, orphanRemoval: true)]
+    private Collection $userAnswers;
+
+    public function __construct()
+    {
+        $this->userAnswers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -152,4 +165,46 @@ class ConjugationPresent
 
         return $this;
     }
+
+/*     public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
+
+        return $this;
+    } */
+
+    /**
+     * @return Collection<int, UserAnswersPresent>
+     */
+    /* public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswersPresent $userAnswer): static
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers->add($userAnswer);
+            $userAnswer->setVerbId($this);
+        }
+
+        return $this;
+    } */
+
+    /* public function removeUserAnswer(UserAnswersPresent $userAnswer): static
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getVerbId() === $this) {
+                $userAnswer->setVerbId(null);
+            }
+        }
+
+        return $this;
+    } */
 }
